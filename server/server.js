@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json()); // ✅ parse JSON first
 
 // ✅ Clerk webhook route (NO middleware here)
-app.post('/api/webhook', ClerkWebhooks);
+app.use('/api/webhook', ClerkWebhooks);
 
 // ✅ Normal protected routes go after middleware
 app.use(clerkMiddleware());
