@@ -1,123 +1,109 @@
-import React from 'react';
-import { assets } from '../assets/assets';
-import { motion } from 'framer-motion';
+import React from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { assets } from '../assets/assets'
 
-// Animation variant
-const fadeInUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 1) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.3,
-      duration: 0.6,
-      ease: 'easeOut',
-    },
-  }),
-};
+import { motion } from 'framer-motion'
+
+import LogoSlider from './LogoCarousel'
 
 function Hero() {
-  return (
-    <motion.div
-      className="pt-32 pb-10 px-4 md:px-10 lg:px-20 bg-[url('./assets/heroimage.png')] bg-cover bg-center min-h-screen text-white"
-      initial="hidden"
-      animate="visible"
-    >
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Badge */}
-        <motion.p
-          className="bg-[#49B9FF]/50 inline-block px-5 py-2 rounded-full text-sm font-medium backdrop-blur-md shadow-md"
-          variants={fadeInUp}
-          custom={0}
-        >
-          The Ultimate Hotel Experience
-        </motion.p>
+  const nav = useNavigate();
+  const navigate = () => nav('/ai', { replace: true });
 
-        {/* Heading */}
+  return (
+    <div className="relative text-center overflow-hidden mt-10">
+
+      {/* خلفية متحركة */}
+      <motion.div
+        className="absolute inset-0  opacity-20 blur-2xl"
+        initial={{ scale: 1.2, opacity: 0 }}
+        animate={{ scale: 1, opacity: 0.2 }}
+        transition={{ duration: 2 }}
+      />
+
+      {/* المحتوى */}
+      <div className="relative z-10">
         <motion.h1
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-          variants={fadeInUp}
-          custom={1}
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className='text-[40px] md:text-[60px] font-bold'
         >
-          Discover Your Perfect <br /> Getaway Destination
+          Create amazing content
         </motion.h1>
 
-        {/* Subtitle */}
-        <motion.p
-          className="text-base sm:text-lg md:text-xl font-light max-w-2xl"
-          variants={fadeInUp}
-          custom={2}
+        <motion.h2
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.3 }}
+          className='text-[60px] font-semibold'
         >
-          Unparalleled luxury and comfort await at the world's most exclusive hotels and resorts. Start your journey today.
+          with <motion.span
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.6, type: "spring" }}
+            className='text-[#5044E5]'
+          >
+            AI tools
+          </motion.span>
+        </motion.h2>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className='text-[#606060]'
+        >
+          Transform your content creation with our suite of premium AI tools. <br />
+          Write articles, generate images, and enhance your workflow.
         </motion.p>
 
-        {/* Search Box */}
         <motion.div
-          className="mt-8 bg-white rounded-xl shadow-lg p-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-5 items-end text-black"
-          variants={fadeInUp}
-          custom={3}
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 120, delay: 1.2 }}
+          className='flex justify-center gap-2 mt-4'
         >
-          {/* Destination */}
-          <div className="flex flex-col">
-            <label className="flex items-center gap-2 text-gray-600 font-medium mb-1 text-sm">
-              <img src={assets.locationIcon} alt="" className="w-5 h-5" />
-              Destination
-            </label>
-            <input
-              type="text"
-              placeholder="Where to?"
-              className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={navigate}
+            className='px-8 py-3 rounded-lg bg-[#5044E5] text-white font-semibold'
+          >
+            Start creating now
+          </motion.button>
 
-          {/* Check In */}
-          <div className="flex flex-col">
-            <label className="flex items-center gap-2 text-gray-600 font-medium mb-1 text-sm">
-              <img src={assets.locationIcon} alt="" className="w-5 h-5" />
-              Check In
-            </label>
-            <input
-              type="date"
-              className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+          <Link>
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              className='px-8 py-3 rounded-lg border border-[#00000026] bg-white font-semibold'
+            >
+              Watch demo
+            </motion.button>
+          </Link>
+        </motion.div>
 
-          {/* Check Out */}
-          <div className="flex flex-col">
-            <label className="flex items-center gap-2 text-gray-600 font-medium mb-1 text-sm">
-              <img src={assets.locationIcon} alt="" className="w-5 h-5" />
-              Check Out
-            </label>
-            <input
-              type="date"
-              className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+          transition={{ duration: 1, delay: 1.5 }}
+          className='flex justify-center gap-2 mt-6 items-center'
+        >
+          <img src={assets.user_group} alt="" className='w-24' />
+          <h3 className='text-gray-500'>Trusted by 10k+ people</h3>
+        </motion.div>
 
-          {/* Guests */}
-          <div className="flex flex-col">
-            <label className="flex items-center gap-2 text-gray-600 font-medium mb-1 text-sm">
-              <img src={assets.locationIcon} alt="" className="w-5 h-5" />
-              Guests
-            </label>
-            <input
-              type="number"
-              min="1"
-              placeholder="2 Adults"
-              className="border border-gray-300 rounded-md px-3 py-2 outline-none focus:ring-2 focus:ring-blue-300"
-            />
-          </div>
-
-          {/* Search Button */}
-          <div className="w-full">
-            <button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-md transition-all duration-300">
-              Search
-            </button>
-          </div>
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 2 }}
+        >
+       
         </motion.div>
       </div>
-    </motion.div>
-  );
+    </div>
+  )
 }
 
-export default Hero;
+export default Hero

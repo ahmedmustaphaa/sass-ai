@@ -1,53 +1,43 @@
-import React from 'react';
-import { Outlet, Route, Routes, useLocation } from 'react-router-dom';
+import React, { Suspense, lazy } from 'react';
+import { Route, Routes, useLocation } from 'react-router-dom';
+import { Navbar } from './component/navbar';
 import Home from './pages/Home';
-import Navbar from './component/Navbar';
-import { Footer } from './component/Footer';
-import Room from './pages/Room';
-import RoomDetails from './pages/RoomDetails';
-import Layout from './pages/Layout';
-import Hotelreq from './pages/Hotelreq';
-import Dashboard from './HotelOwner/Dashboard';
-import Listroom from './HotelOwner/Listroom';
-import AddRoom from './HotelOwner/AddRoom';
+
+const Layout = lazy(() => import('./dashboard/Layout'));
+const Dashboard = lazy(()=>import('./dashboard/Dashboard'))
+const RemoveObject = lazy(() => import('./dashboard/RemoveObject'));
+const BlogTitles = lazy(() => import('./dashboard/BlogTitles'));
+const ReviewResume = lazy(() => import('./dashboard/ReviewResume'));
+const Community = lazy(() => import('./dashboard/Community'));
+const Writearticle = lazy(() => import('./dashboard/Writearticle'));
+const GenerteImages = lazy(() => import('./dashboard/GenerteImages'));
+const RemoveImage = lazy(() => import('./dashboard/RemoveImage'));
 
 function App() {
   const location = useLocation();
-  const pathname = location.pathname;
-
-  const knownRoutes = ['/', '/room', '/room/:id']; // static only
-  const isOwner = pathname.startsWith('/owner');
-
-  // function to check if current path matches any known path (ignoring dynamic ID)
-  const isKnownRoute = () => {
-    if (pathname === '/' || pathname === '/room') return true;
-    if (pathname.startsWith('/room/')) return true;
-    if (pathname.startsWith('/owner')) return true;
-    return false;
-  };
+  const isOwner = location.pathname.startsWith('/ai');
 
   return (
     <div>
+      {!isOwner && <Navbar />}
 
-      {!isOwner && isKnownRoute() && <Navbar />}
-      {!isOwner && isKnownRoute() &&      <Hotelreq/>}
+      <Suspense fallback={<div className="text-center py-20">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<Home />} />
 
-
-      
-      <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/room' element={<Room />} />
-   
-        <Route path='/room/:id' element={<RoomDetails />} />
-        <Route path='/owner' element={<Layout />}>
-          <Route path='' element={<Dashboard/>} />
-          <Route path='listroom' element={<Listroom/>} />
-          <Route path='addroom' element={<AddRoom/>} />
-        </Route>
-        <Route path='*' element={<h1>not found</h1>} />
-      </Routes>
-
-      {!isOwner && isKnownRoute() && <Footer />}
+          {/* Dashboard Routes */}
+          <Route path="/ai" element={<Layout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="write" element={<Writearticle />} />
+            <Route path="blog-titles" element={<BlogTitles />} />
+            <Route path="images" element={<GenerteImages />} />
+            <Route path="remove-bg" element={<RemoveImage />} />
+            <Route path="remove-object" element={<RemoveObject />} />
+            <Route path="review" element={<ReviewResume />} />
+            <Route path="community" element={<Community />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </div>
   );
 }

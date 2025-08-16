@@ -1,30 +1,39 @@
+// server.js
 import express from 'express';
 import dotenv from 'dotenv';
-import { connectedDb } from './config/db.js';
-import { clerkMiddleware } from '@clerk/express';
-import { ClerkWebhooks } from './controller/clerckWebHooks.js';
-
-dotenv.config(); // ✅ Load .env early
+import cors from 'cors';
+import { clerkMiddleware, requireAuth } from '@clerk/express'
+import AiRouter from './route/AiRoute.js';
+import { connectedCloudinary } from './config/cloudinary.js';
+import userRouter from './route/userroute.js';
+dotenv.config();
 
 const app = express();
 
-app.use(express.json()); // ✅ parse JSON first
-
-// ✅ Clerk webhook route (NO middleware here)
-app.use('/api/webhook', ClerkWebhooks);
-
-// ✅ Normal protected routes go after middleware
+// Middlewares
+app.use(cors());
 app.use(clerkMiddleware());
+app.use(requireAuth());
+app.use(express.json());
 
-// Example protected route
+// Routes
+
+app.use('/api/ai',AiRouter)
+app.use('/api/user',userRouter)
 app.get('/', (req, res) => {
-  res.end('server is running');
+  res.send('API is running...');
 });
 
-// ✅ Connect to DB
-connectedDb();
+// مثال على راوت POST
+app.post('/api/data', (req, res) => {
+  const data = req.body;
+  res.json({ message: 'Data received', data });
+});
 
-// ✅ Start server
-app.listen(4000, () => {
-  console.log('server is running on port 4000');
+
+connectedCloudinary()
+// Server listen
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
