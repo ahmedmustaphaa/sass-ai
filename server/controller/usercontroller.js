@@ -1,4 +1,4 @@
-import sql from "../config/Db.js";
+import sql from "../config/db.js";
 
 
 export const getUserCreation=async (req,res)=>{
